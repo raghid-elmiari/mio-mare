@@ -81,8 +81,7 @@ body {
     width: 180px;
     height: 180px;
     border-radius: 50%;
-    object-fit: cover;
-    display: none;
+    object-fit: cover; 
     border: 4px solid white;
     animation: photoGlow 2s infinite alternate;
 }

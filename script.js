@@ -13,7 +13,7 @@ $(document).ready(function () {
         "Mio mare ti amo 💖"
     ];
 // PASSWORD (change it here 💖)
-const SECRET_PASSWORD = "mio mare2";
+const SECRET_PASSWORD = "252927";
 
 $("#unlockBtn").click(function () {
     const entered = $("#passwordInput").val();
@@ -45,19 +45,7 @@ $("#unlockBtn").click(function () {
         $(".hearts").append(heart);
         setTimeout(() => heart.remove(), 8000);
     }, 300);
-
-    // Photo upload
-    $("#photoInput").on("change", function () {
-        const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                $("#photoPreview").attr("src", e.target.result).fadeIn(600);
-                $("#uploadText").hide();
-            };
-            reader.readAsDataURL(file);
-        }
-    });
+ n
 
     // Music toggle
     const music = document.getElementById("bgMusic");
