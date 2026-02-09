@@ -13,7 +13,7 @@ $(document).ready(function () {
         "Mio mare ti amo 💖"
     ];
 // PASSWORD (change it here 💖)
-const SECRET_PASSWORD = "252927";
+const SECRET_PASSWORD = "monstersuniversity25";
 
 $("#unlockBtn").click(function () {
     const entered = $("#passwordInput").val();
