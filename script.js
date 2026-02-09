@@ -47,16 +47,5 @@ $("#unlockBtn").click(function () {
     }, 300);
  n
 
-    // Music toggle
-    const music = document.getElementById("bgMusic");
-    $("#musicBtn").click(function () {
-        if (music.paused) {
-            music.play();
-            $(this).text("🔊 Music");
-        } else {
-            music.pause();
-            $(this).text("🔇 Music");
-        }
-    });
 
 });
