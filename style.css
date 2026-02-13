@@ -1,4 +1,4 @@
-/* Mobile-first base */
+/* ---------- MOBILE-FIRST BASE (Mio Mare original) ---------- */
 body {
     margin: 0;
     min-height: 100vh;
@@ -9,6 +9,7 @@ body {
     font-family: Arial, sans-serif;
     overflow: hidden;
 }
+
 /* Lock screen */
 #lockScreen {
     position: fixed;
@@ -21,7 +22,7 @@ body {
 }
 
 .lock-box {
-    background: rgba(255,255,255,0.25);
+    background: rgba(255, 255, 255, 0.25);
     padding: 30px;
     border-radius: 25px;
     text-align: center;
@@ -64,6 +65,7 @@ body {
     text-align: center;
     color: white;
     z-index: 2;
+    margin: 0 auto;
 }
 
 /* Photo area */
@@ -81,20 +83,11 @@ body {
     width: 180px;
     height: 180px;
     border-radius: 50%;
-    object-fit: cover; 
+    object-fit: cover;
     border: 4px solid white;
     animation: photoGlow 2s infinite alternate;
 }
 
-#uploadText {
-    display: block;
-    padding: 55px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.3);
-    font-size: 1rem;
-}
-
-/* Time text */
 .time-text {
     margin-top: 8px;
     font-size: 0.9rem;
@@ -102,7 +95,6 @@ body {
     opacity: 0.85;
 }
 
-/* Hide input */
 #photoInput {
     display: none;
 }
@@ -118,44 +110,49 @@ body {
     font-size: 1.5rem;
     padding: 18px;
     border-radius: 20px;
-    background: rgba(255,255,255,0.25);
+    background: rgba(255, 255, 255, 0.25);
     animation: glow 2s infinite alternate;
-}
-
-/* Music button */
-#musicBtn {
-    margin-top: 18px;
-    padding: 10px 26px;
-    border: none;
-    border-radius: 30px;
-    font-size: 1rem;
-    background: white;
-    color: #ff4d6d;
-    cursor: pointer;
 }
 
 /* Desktop enhancement */
 @media (min-width: 768px) {
-    .title { font-size: 3rem; }
-    #loveText { font-size: 2.2rem; }
-    #photoPreview { width: 240px; height: 240px; }
+    .title {
+        font-size: 3rem;
+    }
+
+    #loveText {
+        font-size: 2.2rem;
+    }
+
+    #photoPreview {
+        width: 240px;
+        height: 240px;
+    }
 }
 
 /* Animations */
 @keyframes glow {
-    from { box-shadow: 0 0 10px #fff; }
-    to { box-shadow: 0 0 30px #ffd6e0; }
+    from {
+        box-shadow: 0 0 10px #fff;
+    }
+    to {
+        box-shadow: 0 0 30px #ffd6e0;
+    }
 }
 
 @keyframes photoGlow {
-    from { box-shadow: 0 0 10px #fff; }
-    to { box-shadow: 0 0 25px #ffd6e0; }
+    from {
+        box-shadow: 0 0 10px #fff;
+    }
+    to {
+        box-shadow: 0 0 25px #ffd6e0;
+    }
 }
 
-/* Hearts */
+/* Floating hearts */
 .hearts span {
     position: absolute;
-    color: rgba(255,255,255,0.8);
+    color: rgba(255, 255, 255, 0.8);
     animation: float 8s linear infinite;
 }
 
@@ -164,9 +161,368 @@ body {
         transform: translateY(100vh) scale(0.6);
         opacity: 0;
     }
-    50% { opacity: 1; }
+    50% {
+        opacity: 1;
+    }
     100% {
         transform: translateY(-10vh) scale(1.2);
         opacity: 0;
+    }
+}
+
+/* ---------- VALENTINE MODAL & MOVING NO BUTTON ---------- */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(6px);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-card {
+    background: linear-gradient(145deg, #ffa5b0, #ff7e9f);
+    padding: 30px 20px;
+    border-radius: 56px;
+    max-width: 650px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(120, 20, 50, 0.4);
+    border: 4px solid white;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: white;
+    color: #ff4d6d;
+    border: none;
+    font-size: 28px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 0 #b3828a;
+    border: 2px solid white;
+}
+
+.close-btn:active {
+    transform: translateY(4px);
+    box-shadow: none;
+}
+
+/* "Ask Valentine" button */
+.ask-btn {
+    background: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 60px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #ff4d6d;
+    margin-top: 25px;
+    cursor: pointer;
+    box-shadow: 0 6px 0 #b8a0a5;
+    transition: 0.1s;
+    border: 2px solid white;
+}
+
+.ask-btn:active {
+    transform: translateY(6px);
+    box-shadow: none;
+}
+
+/* Valentine question inside modal */
+.valentine-section {
+    width: 100%;
+    text-align: center;
+    color: white;
+}
+
+.question-box h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: white;
+    text-shadow: 3px 3px 0 rgba(180, 50, 80, 0.3);
+    margin-bottom: 8px;
+}
+
+.question-box .name {
+    font-size: 2.6rem;
+    font-weight: 700;
+    background: linear-gradient(45deg, #fff9e6, #ffe6eb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 12px #ffb3c6;
+    letter-spacing: 4px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    position: relative;
+    min-height: 100px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.btn {
+    font-size: 2rem;
+    padding: 16px 32px;
+    border: none;
+    border-radius: 100px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    box-shadow: 0 8px 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.15s ease;
+    cursor: pointer;
+    font-family: inherit;
+    border: 3px solid white;
+}
+
+.btn-yes {
+    background: #ff4d6d;
+    color: white;
+    box-shadow: 0 8px 0 #b32e4a;
+}
+
+.btn-yes:hover {
+    background: #ff3355;
+    transform: scale(1.02);
+    box-shadow: 0 6px 0 #b32e4a;
+}
+
+.btn-no {
+    background: #3a3b3c;
+    color: white;
+    box-shadow: 0 8px 0 #1e1e1e;
+    padding: 16px 36px;
+    position: relative;
+    z-index: 20;
+}
+
+.hint {
+    color: #ffe6eb;
+    font-size: 1.1rem;
+    margin-top: 10px;
+    opacity: 0.9;
+}
+
+/* ---------- BALLOON PAGE – NO TITLE, JUST GRID + POPUP ---------- */
+.balloon-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 800px;
+    margin: 30px auto;
+    color: white;
+}
+
+.balloon-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 30px 40px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.balloon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.balloon-item:hover {
+    transform: scale(1.08);
+}
+
+.balloon {
+    position: relative;
+    width: 80px;
+    height: 94px;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    box-shadow: inset -5px -10px 10px rgba(0, 0, 0, 0.1), 0 10px 15px rgba(0, 0, 0, 0.2);
+    margin-bottom: 4px;
+}
+
+.balloon::before {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 14px;
+    background-color: inherit;
+    filter: brightness(85%);
+    border-radius: 2px 2px 50% 50% / 2px 2px 60% 60%;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+.balloon::after {
+    content: '';
+    position: absolute;
+    top: 96%;
+    left: 50%;
+    width: 2.5px;
+    height: 45px;
+    background: linear-gradient(to bottom, #8b6b4d, #a57c5a);
+    transform: translateX(-50%);
+    z-index: -1;
+    border-radius: 1px;
+}
+
+/* 10 balloon colors */
+.balloon-item:nth-child(1) .balloon {
+    background: #ff6b8b;
+}
+
+.balloon-item:nth-child(2) .balloon {
+    background: #ffac8c;
+}
+
+.balloon-item:nth-child(3) .balloon {
+    background: #ffdc7a;
+}
+
+.balloon-item:nth-child(4) .balloon {
+    background: #b4e7ce;
+}
+
+.balloon-item:nth-child(5) .balloon {
+    background: #d9b8ff;
+}
+
+.balloon-item:nth-child(6) .balloon {
+    background: #ffa3c1;
+}
+
+.balloon-item:nth-child(7) .balloon {
+    background: #a0d6b4;
+}
+
+.balloon-item:nth-child(8) .balloon {
+    background: #ffcc99;
+}
+
+.balloon-item:nth-child(9) .balloon {
+    background: #faaa9d;
+}
+
+.balloon-item:nth-child(10) .balloon {
+    background: #c4a1ff;
+}
+
+/* Back button (on balloon page) */
+.back-btn {
+    margin-top: 40px;
+    background: #b8adc0;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: white;
+    box-shadow: 0 6px 0 #6e5c6e;
+    cursor: pointer;
+    transition: 0.07s;
+    border: 2px solid white;
+}
+
+.back-btn:active {
+    transform: translateY(6px);
+    box-shadow: none;
+}
+
+/* ---------- PHOTO POP‑UP OVERLAY (balloon surprise) ---------- */
+.photo-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.popup-content {
+    text-align: center;
+    max-width: 90%;
+    max-height: 90%;
+}
+
+.popup-image {
+    width: auto;
+    max-width: 80vw;
+    max-height: 70vh;
+    border-radius: 30px;
+    border: 8px solid white;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px;
+}
+
+.popup-desc {
+    font-size: 2rem;
+    font-weight: 600;
+    color: white;
+    background: rgba(255, 75, 100, 0.8);
+    padding: 15px 35px;
+    border-radius: 60px;
+    border: 3px solid white;
+    backdrop-filter: blur(4px);
+    display: inline-block;
+}
+
+/* ---------- RESPONSIVE FIXES ---------- */
+@media (max-width: 550px) {
+    .btn {
+        font-size: 1.6rem;
+        padding: 14px 24px;
+    }
+
+    .balloon {
+        width: 70px;
+        height: 82px;
+    }
+
+    .question-box h1 {
+        font-size: 1.8rem;
+    }
+
+    .question-box .name {
+        font-size: 2rem;
+    }
+
+    .popup-desc {
+        font-size: 1.5rem;
+        padding: 12px 25px;
     }
 }
