@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>💖 Mio Mare · Anniversary & Balloons 💖</title>
+    <style>
+        /* ========== ALL STYLES (merged from style.css, balloons, anniversary) ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+        /* Lock screen */
+        #lockScreen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .lock-box {
+            background: rgba(255,255,255,0.25);
+            padding: 30px;
+            border-radius: 25px;
+            text-align: center;
+            color: white;
+            width: 90%;
+            max-width: 350px;
+        }
+        .lock-box input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 20px;
+            border: none;
+            text-align: center;
+        }
+        .lock-box button {
+            margin-top: 15px;
+            padding: 10px 25px;
+            border-radius: 25px;
+            border: none;
+            background: white;
+            color: #ff4d6d;
+            cursor: pointer;
+        }
+        #errorMsg {
+            margin-top: 10px;
+            display: none;
+            color: #ffe6eb;
+        }
+        /* Main container (original) */
+        .container {
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            color: white;
+            margin: 0 auto;
+        }
+        .photo-box {
+            margin-bottom: 15px;
+        }
+        #photoPreview {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            animation: photoGlow 2s infinite alternate;
+        }
+        .time-text {
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+        #photoInput { display: none; }
+        .title {
+            font-size: 2rem;
+            margin: 15px 0;
+        }
+        #loveText {
+            font-size: 1.5rem;
+            padding: 18px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.25);
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 10px #fff; }
+            to { box-shadow: 0 0 30px #ffd6e0; }
+        }
+        @keyframes photoGlow {
+            from { box-shadow: 0 0 10px #fff; }
+            to { box-shadow: 0 0 25px #ffd6e0; }
+        }
+        /* Floating hearts (global) */
+        .hearts span {
+            position: absolute;
+            color: rgba(255,255,255,0.8);
+            animation: float 8s linear infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0.6); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+        /* Buttons */
+        .ask-btn, .back-main-btn {
+            background: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ff4d6d;
+            margin-top: 15px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #b8a0a5;
+            transition: 0.1s;
+            border: 2px solid white;
+            display: inline-block;
+        }
+        .ask-btn:active, .back-main-btn:active {
+            transform: translateY(6px);
+            box-shadow: none;
+        }
+        /* Balloon section */
+        .balloon-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 800px;
+            margin: 30px auto;
+            color: white;
+        }
+        .balloon-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px 40px;
+            margin-bottom: 20px;
+        }
+        .balloon-item {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .balloon-item:hover { transform: scale(1.08); }
+        .balloon {
+            width: 80px;
+            height: 94px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow: inset -5px -10px 10px rgba(0,0,0,0.1), 0 10px 15px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .balloon::before {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 14px;
+            background-color: inherit;
+            filter: brightness(85%);
+            border-radius: 2px 2px 50% 50%;
+        }
+        .balloon::after {
+            content: '';
+            position: absolute;
+            top: 96%;
+            left: 50%;
+            width: 2.5px;
+            height: 45px;
+            background: linear-gradient(to bottom, #8b6b4d, #a57c5a);
+            transform: translateX(-50%);
+            z-index: -1;
+        }
+        /* balloon colors */
+        .balloon-item:nth-child(1) .balloon { background: #ff6b8b; }
+        .balloon-item:nth-child(2) .balloon { background: #ffac8c; }
+        .balloon-item:nth-child(3) .balloon { background: #ffdc7a; }
+        .balloon-item:nth-child(4) .balloon { background: #b4e7ce; }
+        .balloon-item:nth-child(5) .balloon { background: #d9b8ff; }
+        .balloon-item:nth-child(6) .balloon { background: #ffa3c1; }
+        .balloon-item:nth-child(7) .balloon { background: #a0d6b4; }
+        .balloon-item:nth-child(8) .balloon { background: #ffcc99; }
+        .balloon-item:nth-child(9) .balloon { background: #faaa9d; }
+        .balloon-item:nth-child(10) .balloon { background: #c4a1ff; }
+        .back-btn {
+            margin-top: 40px;
+            background: #b8adc0;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: white;
+            border: 2px solid white;
+            cursor: pointer;
+        }
+        /* Photo popup for balloons */
+        .photo-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            cursor: pointer;
+        }
+        .popup-image {
+            max-width: 80vw;
+            max-height: 70vh;
+            border-radius: 30px;
+            border: 8px solid white;
+        }
+        .popup-body,
+        .fullscreen-body {
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 90vw;
+        }
+        .popup-text {
+            max-width: 420px;
+            position: relative;
+        }
+        .popup-letter {
+            font-size: 1rem;
+            color: #fff;
+            background: rgba(255,255,255,0.1);
+            padding: 18px 20px;
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.25);
+            line-height: 1.6;
+            margin-top: 40px;
+            min-height: 170px;
+        }
+        .popup-desc {
+            font-size: 1.5rem;
+            color: white;
+            background: rgba(255,75,100,0.8);
+            padding: 12px 25px;
+            border-radius: 60px;
+            margin-top: 15px;
+        }
+        .popup-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: rgba(255,255,255,0.95);
+            color: #d33b67;
+            font-weight: 700;
+            padding: 8px 14px;
+            border-radius: 999px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .fullscreen-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: rgba(255,255,255,0.95);
+            color: #d33b67;
+            font-weight: 700;
+            padding: 10px 16px;
+            border-radius: 999px;
+            box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        /* Anniversary section styles */
+        .anniversary-card {
+            max-width: 1300px;
+            width: 90%;
+            background: rgba(255,248,245,0.88);
+            backdrop-filter: blur(12px);
+            border-radius: 68px;
+            padding: 2rem;
+            margin: 30px auto;
+            border: 2px solid rgba(255,255,255,0.7);
+        }
+        .gallery-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+        .memory-card {
+            flex: 1;
+            min-width: 220px;
+            max-width: 300px;
+            background: rgba(255,245,245,0.9);
+            border-radius: 48px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .memory-card:hover { transform: translateY(-8px); }
+        .pic-frame {
+            width: 100%;
+            aspect-ratio: 1/1;
+            border-radius: 40px;
+            overflow: hidden;
+        }
+        .thumb-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .fullscreen-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(12px);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+        }
+        .fullscreen-img {
+            max-width: 90%;
+            max-height: 70vh;
+            border-radius: 32px;
+            border: 4px solid white;
+        }
+        .fullscreen-caption {
+            margin-top: 20px;
+            color: white;
+            background: rgba(255,75,100,0.75);
+            padding: 12px 25px;
+            border-radius: 60px;
+            font-size: 1.2rem;
+        }
+        .close-fullscreen {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: none;
+            font-size: 40px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .hidden-section {
+            display: none;
+        }
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 150;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 14px 12px;
+            background: rgba(255,255,255,0.18);
+            border-bottom: 1px solid rgba(255,255,255,0.35);
+            backdrop-filter: blur(12px);
+            margin-bottom: 18px;
+        }
+        .nav-tab {
+            background: rgba(255,255,255,0.95);
+            color: #d93b78;
+            border: 1px solid rgba(255,255,255,0.85);
+            border-radius: 999px;
+            padding: 12px 22px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+        }
+        .nav-tab:hover {
+            transform: translateY(-2px);
+            background: #ffe7f1;
+        }
+        .nav-tab.active {
+            background: linear-gradient(135deg, #ff96b8, #ff71a5);
+            color: white;
+            box-shadow: 0 14px 24px rgba(255,105,160,0.35);
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .active-nav {
+            background: #ffb7c5;
+            color: #ad3f5a;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 🔐 LOCK SCREEN -->
+<div id="lockScreen">
+    <div class="lock-box">
+        <h2>A Secret For You</h2>
+        <p>Enter the password to open my heart 💕</p>
+        <input type="password" id="passwordInput" placeholder="Password">
+        <button id="unlockBtn">Unlock 💖</button>
+        <div id="errorMsg">Wrong password dear</div>
+    </div>
+</div>
+
+<!-- 🎵 PERSISTENT MUSIC (will keep playing across sections) -->
+<audio id="bgMusic" loop preload="auto">
+    <source src="./hi.mp4" type="audio/mpeg">
+    <!-- Replace with your own song file -->
+</audio>
+
+<!-- MAIN APP (unlocked content) -->
+<div id="mainApp" style="display:none;">
+    <!-- Hearts background -->
+    <div class="hearts"></div>
+
+    <!-- Top navigation bar -->
+    <div class="top-nav">
+        <button class="nav-tab nav-to-main active">Home</button>
+        <button class="nav-tab nav-to-balloons">Balloons</button>
+        <button class="nav-tab nav-to-anniversary">Anniversary</button>
+    </div>
+
+    <!-- SECTION: MAIN MENU (original index) -->
+    <div id="mainMenuSection" class="main-menu">
+        <div class="container">
+            <div class="photo-box">
+                <label for="photoInput" class="photo-label">
+                    <img id="photoPreview" src="./mio.jpeg" alt="Mio Mare">
+                </label>
+                <input type="file" id="photoInput" accept="image/*">
+                <div class="time-text">(4:00 – 4:25)</div>
+            </div>
+            <h1 class="title">💖 Mio Mare 💖</h1>
+            <div id="loveText">Mio mare ti amo</div>
+            <div class="nav-buttons">
+                <button class="ask-btn nav-to-balloons">🎈 Balloons Surprise</button>
+                <button class="ask-btn nav-to-anniversary">🎂 Anniversary Page</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION: BALLOONS PAGE -->
+    <div id="balloonsSection" class="hidden-section">
+        <div class="balloon-section">
+            <div class="balloon-grid" id="balloonGrid">
+                <!-- 10 balloons dynamically via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION: ANNIVERSARY PAGE -->
+    <div id="anniversarySection" class="hidden-section">
+        <div class="anniversary-card">
+            <div class="ribbon" style="background:#ff5c86; display:inline-block; padding:4px 15px; border-radius:40px; margin-bottom:10px;">🎂 1 YEAR</div>
+            <h1 style="color:#c44569;">💘 Our First Orbit 💘</h1>
+            <div class="gallery-grid" id="anniversaryGrid">
+                <!-- 3 cards will be injected by JS -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Fullscreen overlay for balloons photos -->
+<div id="photoPopup" class="photo-popup">
+    <div class="popup-body">
+        <img id="popupImage" class="popup-image" src="">
+        <div class="popup-text">
+            <div id="popupLetter" class="popup-letter">My love, every moment with you is a beautiful page in our story.</div>
+            <div id="popupDesc" class="popup-desc"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Fullscreen overlay for anniversary photos -->
+<div id="anniversaryFullscreen" class="fullscreen-overlay">
+    <button class="close-fullscreen" id="closeAnnivFull">&times;</button>
+    <div class="fullscreen-body">
+        <img id="annivFullImg" class="fullscreen-img" src="">
+        <div class="popup-text">
+            <div id="annivLetter" class="popup-letter"></div>
+            <div id="annivFullCaption" class="fullscreen-caption"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // ---------- PASSWORD UNLOCK ----------
+        const SECRET_PASSWORD = "monstersuniversity25";
+        $("#unlockBtn").click(function () {
+            if ($("#passwordInput").val() === SECRET_PASSWORD) {
+                $("#lockScreen").fadeOut(800);
+                $("#mainApp").fadeIn(800);
+                // Try to autoplay music
+                const audio = document.getElementById("bgMusic");
+                audio.play().catch(e => console.log("autoplay blocked, but music will play after any click"));
+                // Start love message cycling
+                startLoveMessages();
+                // Initialize balloon and anniversary content
+                initBalloons();
+                initAnniversary();
+            } else {
+                $("#errorMsg").fadeIn().delay(1200).fadeOut();
+            }
+        });
+
+        // ---------- LOVE MESSAGES CYCLING ----------
+        const loveLanguages = ["Mio mare ti amo", "I love you", "Je t’aime", "Te amo", "Ich liebe dich", "Ti amo", "Eu te amo", "أحبك", "Я тебя люблю", "Σ’ αγαπώ", "我爱你", "愛してる", "사랑해", "Seni seviyorum", "Ik hou van jou", "Mio mare ti amo 💖"];
+        let loveIndex = 0;
+        function startLoveMessages() {
+            setInterval(() => {
+                $("#loveText").fadeOut(400, function () {
+                    $(this).text(loveLanguages[loveIndex]).fadeIn(400);
+                });
+                loveIndex = (loveIndex + 1) % loveLanguages.length;
+            }, 2000);
+        }
+
+        // ---------- FLOATING HEARTS ----------
+        setInterval(() => {
+            const heart = $("<span>❤</span>");
+            heart.css({
+                left: Math.random() * 100 + "vw",
+                fontSize: Math.random() * 20 + 15 + "px",
+                animationDuration: Math.random() * 4 + 6 + "s"
+            });
+            $(".hearts").append(heart);
+            setTimeout(() => heart.remove(), 8000);
+        }, 300);
+
+        // ---------- SECTION NAVIGATION (no page reload, music continues) ----------
+        function setActiveTab(sectionId) {
+            $(".nav-tab").removeClass("active");
+            if (sectionId === "#mainMenuSection") {
+                $(".nav-to-main").addClass("active");
+            } else if (sectionId === "#balloonsSection") {
+                $(".nav-to-balloons").addClass("active");
+            } else if (sectionId === "#anniversarySection") {
+                $(".nav-to-anniversary").addClass("active");
+            }
+        }
+        function showSection(sectionId) {
+            $("#mainMenuSection, #balloonsSection, #anniversarySection").addClass("hidden-section");
+            $(sectionId).removeClass("hidden-section");
+            setActiveTab(sectionId);
+        }
+        $(".nav-to-main").click(() => showSection("#mainMenuSection"));
+        $(".nav-to-balloons").click(() => showSection("#balloonsSection"));
+        $(".nav-to-anniversary").click(() => showSection("#anniversarySection"));
+
+        // ---------- BALLOONS DATA & INIT ----------
+        const balloonData = [
+            { img: "./mio1.jpeg", desc: "i love you more than words will ever be able to explain", letter: "Dear darling, your smile is the warmest light in my life. Every heartbeat whispers your name." },
+            { img: "./mio2.jpeg", desc: "with you,even ordinary moments feel magical", letter: "Every shared moment with you makes ordinary days feel enchanted. I cherish you endlessly." },
+            { img: "./mio3.jpeg", desc: "No matter where life takes us,my heart will always choose you", letter: "No map or journey compares to the home I feel in your arms. My heart will always choose you." },
+            { img: "./mio4.jpeg", desc: "121", letter: "From our first laugh to our quietest nights, you are my forever and always. Thank you for being mine." },
+            { img: "./mio5.jpeg", desc: "you are my today,my tomorrow ,and my always", letter: "You are my today, my tomorrow, and my always. With you, love is a gentle forever." },
+            { img: "./mio6.jpeg", desc: "your smile is my daily dose of happiness", letter: "Your smile brightens every day, and your love fills every moment with joy. I adore you." },
+            { img: "./mio7.jpeg", desc: "i will be always behind you", letter: "I promise to stand beside you, support you, and love you with all my heart. Always and forever." },
+            { img: "./mio8.jpeg", desc: "my heart feels safest when its with you", letter: "In your presence I feel safe, cherished, and complete. You are the love I always dreamed of." },
+            { img: "./mio9.jpeg", desc: "my sweety", letter: "My sweet love, every day with you is sweeter than the last. I am grateful for you beyond words." },
+            { img: "./mio10.jpeg", desc: "you are not just my valentine, you are always and forever", letter: "You are not only my valentine, but my always and forever. I love you more than you know." }
+        ];
+        function initBalloons() {
+            const $grid = $("#balloonGrid");
+            $grid.empty();
+            for (let i = 0; i < 10; i++) {
+                const $item = $('<div class="balloon-item"><div class="balloon"></div></div>');
+                $item.attr("data-index", i);
+                $grid.append($item);
+            }
+            $(".balloon-item").off("click").on("click", function () {
+                const idx = $(this).attr("data-index");
+                if (balloonData[idx]) {
+                    $("#popupImage").attr("src", balloonData[idx].img);
+                    $("#popupDesc").text(balloonData[idx].desc);
+                    $("#popupLetter").text(balloonData[idx].letter || "My love, every moment with you is a beautiful page in our story.");
+                    $("#photoPopup").fadeIn(300);
+                }
+            });
+            $("#photoPopup").off("click").on("click", function () {
+                $(this).fadeOut(200);
+            });
+        }
+
+        // ---------- ANNIVERSARY SECTION (3 photos with fullscreen) ----------
+        function initAnniversary() {
+            const $annGrid = $("#anniversaryGrid");
+            $annGrid.html(`
+                <div class="memory-card" data-type="memory">
+                    <div class="pic-frame"><img class="thumb-img" src="./memory1.jpeg" alt="memory"></div>
+                    <h3></h3>
+                    <p>the day our story started</p>
+                </div>
+                <div class="memory-card" data-type="letter" data-message="My darling,<br><br>Every single day of this first year has been a treasure. This letter is a small reminder: I choose you, again and always. Happy 1st anniversary, my soulmate. 🌹">
+                    <div class="pic-frame"><img class="thumb-img" src="./letter.jpeg" alt="letter"></div>
+                    <h3> </h3>
+                    <p>words i wrote just for you</p>
+                </div>
+                <div class="memory-card" data-type="future">
+                    <div class="pic-frame"><img class="thumb-img" src="./future.jpeg" alt="future"></div>
+                    <h3> </h3>
+                    <p>first year done, forever to go</p>
+                </div>
+            `);
+            const $fullOverlay = $("#anniversaryFullscreen");
+            const $fullImg = $("#annivFullImg");
+            const $fullCaption = $("#annivFullCaption");
+            $(".memory-card").off("click").on("click", function () {
+                const type = $(this).data("type");
+                const imgSrc = $(this).find(".thumb-img").attr("src");
+                $fullImg.attr("src", imgSrc);
+                if (type === "letter") {
+                    $fullCaption.html($(this).data("message") || " My love for you grows every day.");
+                    $("#annivLetter").html("My dearest, this letter is a promise: to love you, cherish you, and celebrate every day with you.");
+                } else if (type === "memory") {
+                    $fullCaption.text(" our most beautiful memory – forever in my heart 💖");
+                    $("#annivLetter").text("Every memory with you is a treasure. I hold this one close as proof of our love.");
+                } else {
+                    $fullCaption.text(" one year down, a lifetime to go. you are my soulmate 💘");
+                    $("#annivLetter").text("Our future is a love letter waiting to be written, with every page filled by you and me.");
+                }
+                $fullOverlay.fadeIn(300);
+            });
+            $("#closeAnnivFull").click(() => $fullOverlay.fadeOut(200));
+            $fullOverlay.click((e) => { if (e.target === $fullOverlay[0]) $fullOverlay.fadeOut(200); });
+        }
+
+        // upload photo preview (original feature)
+        $("#photoInput").on("change", function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (ev) { $("#photoPreview").attr("src", ev.target.result); };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>
+</body>
+</html>
