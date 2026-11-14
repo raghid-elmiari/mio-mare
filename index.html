@@ -505,6 +505,7 @@
             display: flex;
             overflow-y: auto;
             overscroll-behavior: contain;
+            pointer-events: none;
             -webkit-overflow-scrolling: touch;
             padding: 76px 16px 36px;
             -webkit-backdrop-filter: blur(12px);
@@ -522,6 +523,7 @@
         .fullscreen-overlay.open {
             opacity: 1;
             visibility: visible;
+            pointer-events: auto;
             transition: opacity 0.3s ease;
         }
         .popup-image {
@@ -759,9 +761,11 @@
             z-index: 150;
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: clamp(5px, 1.5vw, 10px);
             padding: 14px 12px;
             padding-top: max(14px, env(safe-area-inset-top));
+            overflow-x: auto;
+            scrollbar-width: none;
             background: rgba(255,255,255,0.18);
             border-bottom: 1px solid rgba(255,255,255,0.35);
             -webkit-backdrop-filter: blur(14px);
@@ -773,8 +777,10 @@
             color: #d93b78;
             border: 1px solid rgba(255,255,255,0.85);
             border-radius: 999px;
-            padding: 11px clamp(14px, 4.5vw, 22px);
-            font-size: clamp(0.88rem, 3.6vw, 1rem);
+            padding: 11px clamp(9px, 2.6vw, 22px);
+            font-size: clamp(0.74rem, 3.3vw, 1rem);
+            white-space: nowrap;
+            flex-shrink: 0;
             font-weight: 600;
             letter-spacing: 0.02em;
             cursor: pointer;
@@ -841,6 +847,238 @@
             from { height: 4px; }
             to { height: 18px; }
         }
+        /* ========== OUR ADVENTURES (memory book) ========== */
+        #adventuresSection {
+            position: relative;
+            z-index: 1;
+            color: #fff;
+            padding-bottom: 60px;
+        }
+        .adv-intro {
+            min-height: calc(100vh - 110px);
+            min-height: calc(100dvh - 110px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 20px 40px;
+        }
+        .adv-intro > * { animation: riseIn 1.3s var(--ease) both; }
+        .adv-intro > :nth-child(2) { animation-delay: 0.25s; }
+        .adv-intro > :nth-child(3) { animation-delay: 0.55s; }
+        .adv-intro > :nth-child(4) { animation-delay: 1.1s; }
+        .adv-kicker {
+            font-size: 0.76rem;
+            letter-spacing: 0.34em;
+            text-transform: uppercase;
+            opacity: 0.92;
+        }
+        .adv-title {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: clamp(3.3rem, 15vw, 6.5rem);
+            line-height: 1;
+            margin: 0.22em 0 0.18em;
+            text-shadow: 0 4px 26px rgba(190,40,90,0.35);
+        }
+        .adv-sub {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: clamp(1.35rem, 5vw, 1.8rem);
+        }
+        .adv-scroll {
+            margin-top: 9vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            opacity: 0.85;
+        }
+        .adv-scroll::after {
+            content: '';
+            width: 1px;
+            height: 54px;
+            background: linear-gradient(to bottom, #fff, transparent);
+            transform-origin: top;
+            animation: scrollHint 2.4s ease-in-out infinite;
+        }
+        @keyframes scrollHint {
+            0% { transform: scaleY(0); opacity: 0; }
+            40% { transform: scaleY(1); opacity: 1; }
+            100% { transform: scaleY(1); opacity: 0; }
+        }
+        .adv-chapter {
+            text-align: center;
+            padding: 9vh 24px 3vh;
+        }
+        .adv-chapter h2 {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: clamp(2.5rem, 10vw, 4.2rem);
+            line-height: 1.05;
+            margin: 0.2em 0;
+            text-shadow: 0 3px 20px rgba(190,40,90,0.3);
+        }
+        .adv-chapter p {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: clamp(1.2rem, 4.4vw, 1.5rem);
+            max-width: 30ch;
+            margin: 0 auto;
+            line-height: 1.35;
+        }
+        .adv-memory {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 22px;
+            align-items: center;
+            max-width: 1060px;
+            margin: 0 auto;
+            padding: 4vh 22px;
+        }
+        .adv-photo {
+            display: block;
+            justify-self: center;
+            width: min(100%, calc(70vh * var(--ar, 1.5) + 16px));
+            padding: 8px;
+            background: #fff;
+            border: none;
+            border-radius: 24px;
+            box-shadow: 0 26px 60px rgba(150,30,70,0.32);
+            cursor: zoom-in;
+            transform: rotate(var(--tilt, 0deg));
+            transition: transform 0.6s var(--ease), box-shadow 0.6s ease;
+        }
+        .adv-photo:hover {
+            transform: rotate(0deg) scale(1.015);
+            box-shadow: 0 34px 70px rgba(150,30,70,0.4);
+        }
+        /* The frame always takes the exact shape of the photo or video, so nothing is cropped or stretched */
+        .adv-frame {
+            position: relative;
+            display: block;
+            width: 100%;
+            aspect-ratio: var(--ar, 1.5);
+            border-radius: 17px;
+            overflow: hidden;
+            background: #1c1016;
+            container-type: size;
+        }
+        .adv-frame img,
+        .adv-frame video {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        /* A photo saved sideways is turned upright on screen only; the file itself is untouched */
+        .adv-frame img.turn-left {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100cqh;
+            height: 100cqw;
+            transform: translate(-50%, -50%) rotate(-90deg);
+        }
+        .adv-play {
+            position: absolute;
+            inset: 0;
+            margin: auto;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.9);
+            color: var(--rose-deep);
+            font-size: 1.4rem;
+            display: grid;
+            place-items: center;
+            padding-left: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            pointer-events: none;
+        }
+        .adv-words { text-align: center; }
+        .adv-num {
+            font-size: 0.74rem;
+            letter-spacing: 0.34em;
+            opacity: 0.9;
+        }
+        .adv-words blockquote {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-weight: 500;
+            font-size: clamp(1.55rem, 5.8vw, 2.25rem);
+            line-height: 1.28;
+            margin-top: 10px;
+            text-shadow: 0 2px 16px rgba(190,40,90,0.28);
+        }
+        .adv-thread {
+            width: 1px;
+            height: 9vh;
+            min-height: 46px;
+            margin: 0 auto;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.75), transparent);
+        }
+        .adv-outro {
+            text-align: center;
+            padding: 12vh 24px 8vh;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+        .adv-outro h2 {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: clamp(2.4rem, 9vw, 3.8rem);
+            line-height: 1.05;
+            margin: 0.25em 0 0.35em;
+        }
+        .adv-outro p {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-size: clamp(1.3rem, 4.8vw, 1.7rem);
+            line-height: 1.4;
+        }
+        .adv-outro .adv-heart { font-size: 1.6rem; display: inline-block; animation: heartbeat 1.8s ease-in-out infinite; }
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.18); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.12); }
+        }
+        /* Scroll reveal */
+        .adv-reveal {
+            opacity: 0;
+            transform: translateY(42px);
+            transition: opacity 1.1s ease, transform 1.2s var(--ease);
+        }
+        .adv-reveal.in-view { opacity: 1; transform: none; }
+        .adv-memory .adv-words.adv-reveal { transition-delay: 0.18s; }
+        /* Adventure viewer */
+        .adv-view-frame {
+            width: min(92vw, calc(72vh * var(--ar, 1.5)));
+            border: 4px solid #fff;
+            border-radius: 24px;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+        }
+        .adv-view-caption {
+            width: 100%;
+            max-width: 620px;
+            text-align: center;
+            font-size: 1.35rem;
+        }
+        @media (min-width: 820px) {
+            .adv-memory {
+                grid-template-columns: 1.15fr 1fr;
+                gap: 60px;
+                padding: 6vh 40px;
+            }
+            .adv-memory.flip .adv-photo { order: 2; }
+            .adv-words { text-align: left; }
+            .adv-memory.flip .adv-words { text-align: right; }
+        }
         .hidden-section {
             display: none !important;
         }
@@ -891,6 +1129,7 @@
         <button class="nav-tab nav-to-main active">Home</button>
         <button class="nav-tab nav-to-balloons">Balloons</button>
         <button class="nav-tab nav-to-anniversary">Anniversary</button>
+        <button class="nav-tab nav-to-adventures">Adventures</button>
     </div>
 
     <!-- SECTION: MAIN MENU (original index) -->
@@ -934,6 +1173,24 @@
         </div>
     </div>
 
+    <!-- SECTION: OUR ADVENTURES (memory book) -->
+    <div id="adventuresSection" class="hidden-section">
+        <header class="adv-intro">
+            <div class="adv-kicker">A memory book</div>
+            <h1 class="adv-title">Our Adventures</h1>
+            <p class="adv-sub">Moments we lived together</p>
+            <div class="adv-scroll">Scroll</div>
+        </header>
+        <div id="adventureStory">
+            <!-- chapters and memories are injected by JS from adventureData -->
+        </div>
+        <footer class="adv-outro adv-reveal">
+            <span class="adv-heart">💖</span>
+            <h2>To be continued</h2>
+            <p>These are only the first pages. The best adventures are the ones we haven't taken yet, and I want every single one of them with you.</p>
+        </footer>
+    </div>
+
     <!-- Music play / pause -->
     <button type="button" id="musicToggle" class="music-toggle" aria-label="Play music" title="Music">
         <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
@@ -964,6 +1221,18 @@
             <div id="annivLetter" class="popup-letter"></div>
             <div id="annivFullCaption" class="fullscreen-caption"></div>
         </div>
+    </div>
+</div>
+
+<!-- Fullscreen overlay for adventure photos and videos -->
+<div id="adventureViewer" class="fullscreen-overlay" role="dialog" aria-modal="true" aria-label="Adventure memory" aria-hidden="true">
+    <button type="button" class="close-fullscreen" id="closeAdventure" aria-label="Close">&times;</button>
+    <button type="button" class="popup-arrow popup-prev" id="advPrev" aria-label="Previous memory">&lsaquo;</button>
+    <button type="button" class="popup-arrow popup-next" id="advNext" aria-label="Next memory">&rsaquo;</button>
+    <div id="advCounter" class="popup-counter"></div>
+    <div class="fullscreen-body">
+        <div id="advViewMedia"></div>
+        <div id="advViewCaption" class="popup-letter adv-view-caption"></div>
     </div>
 </div>
 
@@ -1033,6 +1302,7 @@
                 // Initialize balloon and anniversary content
                 initBalloons();
                 initAnniversary();
+                initAdventures();
                 startTogetherCounter();
                 preloadPhotos();
             } else {
@@ -1101,7 +1371,7 @@
 
         // ---------- TOGETHER COUNTER ----------
         // Put your start date here (YYYY-MM-DD) and the counter appears on the home page.
-        const TOGETHER_SINCE = "";
+        const TOGETHER_SINCE = "2025-04-25";
         function startTogetherCounter() {
             const start = TOGETHER_SINCE ? new Date(TOGETHER_SINCE + "T00:00:00") : null;
             if (!start || isNaN(start)) return;
@@ -1142,10 +1412,12 @@
                 $(".nav-to-balloons").addClass("active");
             } else if (sectionId === "#anniversarySection") {
                 $(".nav-to-anniversary").addClass("active");
+            } else if (sectionId === "#adventuresSection") {
+                $(".nav-to-adventures").addClass("active");
             }
         }
         function showSection(sectionId) {
-            $("#mainMenuSection, #balloonsSection, #anniversarySection").addClass("hidden-section");
+            $("#mainMenuSection, #balloonsSection, #anniversarySection, #adventuresSection").addClass("hidden-section");
             $(sectionId).removeClass("hidden-section");
             setActiveTab(sectionId);
             window.scrollTo(0, 0);
@@ -1153,6 +1425,7 @@
         $(".nav-to-main").click(() => showSection("#mainMenuSection"));
         $(".nav-to-balloons").click(() => showSection("#balloonsSection"));
         $(".nav-to-anniversary").click(() => showSection("#anniversarySection"));
+        $(".nav-to-adventures").click(() => showSection("#adventuresSection"));
 
         // ---------- OVERLAYS (shared open / close) ----------
         let lastTrigger = null;
@@ -1393,8 +1666,150 @@
             if (e.target === $fullOverlay[0] || $(e.target).hasClass("fullscreen-body")) closeOverlay($fullOverlay);
         });
 
-        // Keyboard: Esc closes, arrows move between balloon memories
+        // ---------- OUR ADVENTURES (memory book) ----------
+        // To add a memory: put the file in this folder and add a line to a chapter below.
+        //   photo: { img: "./name.jpeg", w: 1280, h: 853, caption: "..." }
+        //   video: { video: "./name.mp4", caption: "..." }   (its shape is read from the file itself)
+        const adventureData = [
+            {
+                label: "Chapter one",
+                title: "The River",
+                text: "The day we let the water decide the way.",
+                memories: [
+                    { img: "./adventure-rafting.jpeg", w: 1280, h: 853, caption: "Everyone else was fighting the river. I kept looking back to see if you were still smiling." },
+                    // this photo was saved sideways: turnLeft shows it upright without touching the file
+                    { img: "./adventure-rafting-selfie.jpeg", w: 720, h: 1280, turnLeft: true, caption: "Soaked, tired, and happier than either of us knew how to say." }
+                ]
+            },
+            {
+                label: "Chapter two",
+                title: "The Hills",
+                text: "Pine trees, a white horse, and a road with no hurry in it.",
+                memories: [
+                    { img: "./adventure-horse.jpeg", w: 2268, h: 4032, caption: "You looked down from that saddle like the whole hill was yours. I just held the reins and agreed." },
+                    { img: "./adventure-buggy.jpeg", w: 4032, h: 2268, caption: "Dust on the windshield, your hand on the wheel. I would go anywhere you steer." }
+                ]
+            }
+        ];
+        const adventureList = [];
+        const $advViewer = $("#adventureViewer");
+        let currentAdventure = 0;
+        let resumeMusicAfterVideo = false;
+
+        function adventureRatio(m) {
+            if (m.video) return m.w && m.h ? m.w / m.h : 16 / 9;
+            return m.turnLeft ? m.h / m.w : m.w / m.h;
+        }
+        function buildAdventureFrame(m, inViewer) {
+            const $frame = $('<span class="adv-frame"></span>');
+            $frame[0].style.setProperty("--ar", adventureRatio(m));
+            if (m.video) {
+                const $video = $('<video playsinline preload="metadata"></video>');
+                $video.on("loadedmetadata", function () {
+                    if (!this.videoWidth) return;
+                    const ar = this.videoWidth / this.videoHeight;
+                    $frame[0].style.setProperty("--ar", ar);
+                    $frame.parent()[0].style.setProperty("--ar", ar);
+                });
+                if (inViewer) {
+                    $video.attr("controls", true).attr("src", m.video);
+                    $video.on("play", function () {
+                        if (!audio.paused) { resumeMusicAfterVideo = true; clearInterval(fadeTimer); audio.pause(); }
+                    });
+                } else {
+                    $video.prop("muted", true).attr("src", m.video + "#t=0.1").attr("tabindex", -1);
+                    $frame.append('<span class="adv-play" aria-hidden="true">▶</span>');
+                }
+                $frame.prepend($video);
+            } else {
+                const $img = $('<img decoding="async">').attr("src", m.img).attr("alt", m.caption);
+                if (!inViewer) $img.attr("loading", "lazy");
+                if (m.turnLeft) $img.addClass("turn-left");
+                $frame.append($img);
+            }
+            return $frame;
+        }
+        function showAdventure(idx) {
+            const total = adventureList.length;
+            currentAdventure = (idx + total) % total;
+            const m = adventureList[currentAdventure];
+            const $wrap = $('<div class="adv-view-frame adv-frame-wrap"></div>');
+            $wrap[0].style.setProperty("--ar", adventureRatio(m));
+            $wrap.append(buildAdventureFrame(m, true));
+            $("#advViewMedia").empty().append($wrap);
+            $("#advViewCaption").text(m.caption);
+            $("#advCounter").text((currentAdventure + 1) + " / " + total);
+        }
+        function closeAdventure() {
+            if (!$advViewer.hasClass("open")) return;
+            $("#advViewMedia video").each(function () { this.pause(); });
+            closeOverlay($advViewer);
+            setTimeout(() => { if (!$advViewer.hasClass("open")) $("#advViewMedia").empty(); }, 320);
+            if (resumeMusicAfterVideo) {
+                resumeMusicAfterVideo = false;
+                if (store.get("mioMusic") !== "off") playMusic().catch(() => {});
+            }
+        }
+        function initAdventures() {
+            const $story = $("#adventureStory").empty();
+            adventureList.length = 0;
+            adventureData.forEach(chapter => {
+                const $chapter = $('<section class="adv-chapter adv-reveal"><div class="adv-kicker"></div><h2></h2><p></p></section>');
+                $chapter.find(".adv-kicker").text(chapter.label);
+                $chapter.find("h2").text(chapter.title);
+                $chapter.find("p").text(chapter.text);
+                $story.append($chapter);
+                chapter.memories.forEach((m, i) => {
+                    const n = adventureList.push(m);
+                    if (i > 0) $story.append('<div class="adv-thread" aria-hidden="true"></div>');
+                    const $memory = $('<article class="adv-memory"></article>').toggleClass("flip", n % 2 === 0);
+                    const $photo = $('<button type="button" class="adv-photo adv-reveal"></button>')
+                        .attr("aria-label", (m.video ? "Play video: " : "Open photo: ") + m.caption)
+                        .attr("data-index", n - 1);
+                    $photo[0].style.setProperty("--ar", adventureRatio(m));
+                    $photo[0].style.setProperty("--tilt", (n % 2 === 0 ? 1.4 : -1.4) + "deg");
+                    $photo.append(buildAdventureFrame(m, false));
+                    const $words = $('<div class="adv-words adv-reveal"><div class="adv-num"></div><blockquote></blockquote></div>');
+                    $words.find(".adv-num").text(String(n).padStart(2, "0"));
+                    $words.find("blockquote").text(m.caption);
+                    $story.append($memory.append($photo, $words));
+                });
+            });
+            $(".adv-photo").on("click", function () {
+                showAdventure(Number($(this).attr("data-index")));
+                openOverlay($advViewer, this);
+            });
+            // Reveal each piece as it scrolls into view
+            const $reveals = $("#adventuresSection .adv-reveal");
+            if (reduceMotion || !("IntersectionObserver" in window)) {
+                $reveals.addClass("in-view");
+            } else {
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add("in-view");
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.18 });
+                $reveals.each(function () { observer.observe(this); });
+            }
+        }
+        $("#closeAdventure").on("click", closeAdventure);
+        $("#advPrev").on("click", () => showAdventure(currentAdventure - 1));
+        $("#advNext").on("click", () => showAdventure(currentAdventure + 1));
+        $advViewer.on("click", (e) => {
+            if (e.target === $advViewer[0] || $(e.target).hasClass("fullscreen-body")) closeAdventure();
+        });
+
+        // Keyboard: Esc closes, arrows move between memories
         $(document).on("keydown", function (e) {
+            if ($advViewer.hasClass("open")) {
+                if (e.key === "Escape") closeAdventure();
+                if (e.key === "ArrowLeft") showAdventure(currentAdventure - 1);
+                if (e.key === "ArrowRight") showAdventure(currentAdventure + 1);
+                return;
+            }
             if (e.key === "Escape") {
                 closeOverlay($fullOverlay);
                 closeOverlay($photoPopup);
