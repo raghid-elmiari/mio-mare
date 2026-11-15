@@ -1536,6 +1536,19 @@
             $musicBtn.toggleClass("playing", playing).attr("aria-label", playing ? "Pause music" : "Play music");
         }
         $(audio).on("play pause", syncMusicButton);
+        // Only the first 4 minutes of the song are used: it fades out there and starts again.
+        // (The file itself is untouched; change MUSIC_END to move the cut.)
+        const MUSIC_END = 240;
+        $(audio).on("timeupdate", function () {
+            const left = MUSIC_END - audio.currentTime;
+            if (left <= 0) {
+                audio.currentTime = 0;
+                playMusic().catch(() => {});
+            } else if (left < 3) {
+                clearInterval(fadeTimer);
+                audio.volume = Math.max(0, Math.min(1, left / 3));
+            }
+        });
         $musicBtn.on("click", function () {
             if (audio.paused) {
                 store.set("mioMusic", "on");
